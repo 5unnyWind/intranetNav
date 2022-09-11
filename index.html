@@ -21,30 +21,31 @@
 
     <script>
         const runIP = window.location.hostname;
+        let qrcode = new QRCode(document.getElementById("qrcode"), {
+            text: `http://192.168.50.11:5500`,
+            width: 128,
+            height: 128,
+            colorDark: "#000000",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
         window.onload = () => {
             const runPort = localStorage.getItem('runPort')
             if (!runPort) return;
             document.getElementById('runPort').value = runPort;
             renderLinks(runIP, runPort)
         }
+        getIP(ip => {
+            document.getElementById("ip").innerHTML = '本设备内网IP为：' + ip
+            renderQrcode(ip)
+        })
         const handleRunPortChange = (runPort) => {
             renderLinks(runIP, runPort)
             localStorage.setItem('runPort', runPort)
         }
-        getIP(ip => {
-            // ip=''
-            document.getElementById("ip").innerHTML = '本设备内网IP为：' + ip
-            renderQrcode(ip)
-        })
+
         const renderQrcode = (ip, port = 5500) => {
-            let qrcode = new QRCode(document.getElementById("qrcode"), {
-                text: `http://${ip}:${port}`,
-                width: 128,
-                height: 128,
-                colorDark: "#000000",
-                colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.H
-            });
+            qrcode.text = `http://${ip}:${port}`
         }
         const renderLinks = (runIP, port = 3333) => {
             const labels = ['', 'home', 'student', 'phone', 'qq', 'password', 'intro', 'about', 'completed', 'update']
