@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <br />
+    <br />
+    <br />
+    <div id="ip"></div>
+    <div>项目运行在端口：<input id="runPort" onchange="handleRunPortChange(this.value)"></input></div>
+    <div id="qrcode" style='float: right;'></div>
+    <div class="container"></div>
+    <script src="./getIP.js"></script>
+    <script src="./qrcode.js"></script>
+
+    <script>
+        const runIP = window.location.hostname;
+        window.onload = () => {
+            const runPort = localStorage.getItem('runPort')
+            if (!runPort) return;
+            document.getElementById('runPort').value = runPort;
+            renderLinks(runIP, runPort)
+        }
+        const handleRunPortChange = (runPort) => {
+            renderLinks(runIP, runPort)
+            localStorage.setItem('runPort', runPort)
+        }
+        getIP(ip => {
+            // ip=''
+            document.getElementById("ip").innerHTML = '本设备内网IP为：' + ip
+            renderQrcode(ip)
+        })
+        const renderQrcode = (ip, port = 5500) => {
+            let qrcode = new QRCode(document.getElementById("qrcode"), {
+                text: `http://${ip}:${port}`,
+                width: 128,
+                height: 128,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+        const renderLinks = (runIP, port = 3333) => {
+            const labels = ['', 'home', 'student', 'phone', 'qq', 'password', 'intro', 'about', 'completed', 'update']
+            document.querySelector('.container').innerHTML = `
+            <a href="http://${runIP}:${port}/?header=false">index</a>
+            <a href="https://fresh-incu.ncuos.com">fresh-init</a>
+            ${labels.map(label => `<a href="http://${runIP}:${port}/${label}">${label}</a><div/>`)}
+            `
+        }
+
+    </script>
+</body>
+
+</html>
