@@ -5,17 +5,20 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="./style.css">
+    <title>IntranetNav</title>
 </head>
 
 <body>
-    <br />
-    <br />
-    <br />
-    <div id="ip"></div>
-    <div>项目运行在端口：<input id="runPort" onchange="handleRunPortChange(this.value)"></input></div>
-    <div id="qrcode" style='float: right;'></div>
-    <div class="container"></div>
+    <header>Intranet Navigation</header>
+    <main>
+        <div id="ip" ></div>
+        <div>项目运行在端口：<input id="runPort" onchange="handleRunPortChange(this.value)"></input></div>
+        <div class="container">
+        </div>
+        <div id="qrcode"></div>
+    </main>
+
     <script src="./getIP.js"></script>
     <script src="./qrcode.js"></script>
 
@@ -48,11 +51,15 @@
             qrcode.text = `http://${ip}:${port}`
         }
         const renderLinks = (runIP, port = 3333) => {
-            const labels = ['', 'home', 'student', 'phone', 'qq', 'password', 'intro', 'about', 'completed', 'update']
-            document.querySelector('.container').innerHTML = `
-            <a href="http://${runIP}:${port}/?header=false">index</a>
-            <a href="https://fresh-incu.ncuos.com">fresh-init</a>
-            ${labels.map(label => `<a href="http://${runIP}:${port}/${label}">${label}</a><div/>`)}
+            const pages = ['home', 'student', 'phone', 'qq', 'password', 'intro', 'about', 'completed', 'update']
+            let containerHTML = ''
+            pages.forEach(page => {
+                // let randomColor = Math.floor(Math.random() * 16777215).toString(16);
+                containerHTML += `<a href="http://${runIP}:${port}/${page}">${page}</a>`
+            })
+            document.querySelector('.container').innerHTML += `
+            <a href="http://${runIP}:${port}/">index</a>
+            ${containerHTML}
             `
         }
 
