@@ -12,17 +12,25 @@
 <body>
     <header>Intranet Navigation</header>
     <main>
-        <div id="ip" ></div>
+        <div id="ip"></div>
         <div>项目运行在端口：<input id="runPort" onchange="handleRunPortChange(this.value)"></input></div>
         <div class="container">
         </div>
         <div id="qrcode"></div>
     </main>
+    <footer id="ua"></footer>
 
     <script src="./getIP.js"></script>
     <script src="./qrcode.js"></script>
+    <script src="./ua-parser.min.js"></script>
 
     <script>
+        let parser = new UAParser();
+        const UA = parser.getResult()
+        console.log(UA)
+        document.getElementById('ua').innerHTML = `
+        ${UA.browser.name} ${UA.browser.version} | ${UA.engine.name} ${UA.engine.version} | ${UA.os.name} ${UA.os.version}
+        `
         const runIP = window.location.hostname;
         let qrcode = new QRCode(document.getElementById("qrcode"), {
             text: `http://192.168.50.11:5500`,

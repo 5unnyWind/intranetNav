@@ -43,3 +43,11 @@ a:nth-of-type(2){
 #qrcode {
     margin-top: 10px;
 }
+
+footer{
+  position: fixed;
+  width: 100vw;
+  text-align: center;
+  bottom: 10px;
+  color: gray;
+}
